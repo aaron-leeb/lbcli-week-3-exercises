@@ -8,8 +8,11 @@ rawtxhex="01000000000101c8b0928edebbec5e698d5f86d0474595d9f6a5b2e4e3772cd9d1005f
 
 utxo_txid_1=$(bitcoin-cli -regtest decoderawtransaction $rawtxhex | jq -r '.vin[0]' | jq -r '.txid')
 utxo_vout_1=$(bitcoin-cli -regtest decoderawtransaction $rawtxhex | jq -r '.vin[0]' | jq -r '.vout')
+utxo_txid_2=$(bitcoin-cli -regtest decoderawtransaction $rawtxhex | jq -r '.vin[1]' | jq -r '.txid')
+utxo_vout_2=$(bitcoin-cli -regtest decoderawtransaction $rawtxhex | jq -r '.vin[1]' | jq -r '.vout')
+
 recipient="2MvLcssW49n9atmksjwg2ZCMsEMsoj3pzUP"
 
-psbt=$(bitcoin-cli -regtest -named createpsbt inputs='''[{"txid": "'$utxo_txid_1'","vout": '$utxo_vout_1'}]''' outputs='''[{"'$recipient'": 0.2}]''')
+psbt=$(bitcoin-cli -regtest -named createpsbt inputs='''[{"txid": "'$utxo_txid_1'","vout": '$utxo_vout_1'}, {"txid": "'$utxo_txid_2'","vout": '$utxo_vout_2'}]''' outputs='''[{"'$recipient'": 0.2}]''')
 
 echo $psbt
